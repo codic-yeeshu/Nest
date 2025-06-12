@@ -7,6 +7,10 @@ export interface crumbItem {
   title: string
 }
 
+export interface crumbItem {
+  title: string
+}
+
 export interface PageLayoutProps {
   breadcrumbItems?: crumbItem
   children: React.ReactNode
