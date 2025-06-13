@@ -20,9 +20,9 @@ import FontAwesomeIconWrapper from 'wrappers/FontAwesomeIconWrapper'
 import { ErrorDisplay, handleAppError } from 'app/global-error'
 import { GET_PROJECT_METADATA, GET_TOP_CONTRIBUTORS } from 'server/queries/projectQueries'
 import { GET_LEADER_DATA } from 'server/queries/userQueries'
-import { TopContributorsTypeGraphql } from 'types/contributor'
-import { ProjectTypeGraphql } from 'types/project'
-import { User } from 'types/user'
+import type { Contributor } from 'types/contributor'
+import type { Project } from 'types/project'
+import type { User } from 'types/user'
 import { aboutText, technologies } from 'utils/aboutData'
 import AnchorTitle from 'components/AnchorTitle'
 import AnimatedCounter from 'components/AnimatedCounter'
@@ -30,7 +30,7 @@ import LoadingSpinner from 'components/LoadingSpinner'
 import Markdown from 'components/MarkdownWrapper'
 import PageLayout from 'components/PageLayout'
 import SecondaryCard from 'components/SecondaryCard'
-import TopContributors from 'components/TopContributors'
+import TopContributorsList from 'components/TopContributorsList'
 import UserCard from 'components/UserCard'
 
 const leaders = {
@@ -55,8 +55,8 @@ const About = () => {
     }
   )
 
-  const [projectMetadata, setProjectMetadata] = useState<ProjectTypeGraphql | null>(null)
-  const [topContributors, setTopContributors] = useState<TopContributorsTypeGraphql[]>([])
+  const [projectMetadata, setProjectMetadata] = useState<Project | null>(null)
+  const [topContributors, setTopContributors] = useState<Contributor[]>([])
 
   useEffect(() => {
     if (projectMetadataResponse?.project) {
@@ -123,14 +123,14 @@ const About = () => {
             </div>
           </SecondaryCard>
 
-          {topContributors && (
-            <TopContributors
-              icon={faUsers}
-              contributors={topContributors}
-              maxInitialDisplay={9}
-              type="contributor"
-            />
-          )}
+        {topContributors && (
+          <TopContributorsList
+            icon={faUsers}
+            contributors={topContributors}
+            maxInitialDisplay={9}
+            type="contributor"
+          />
+        )}
 
           <SecondaryCard icon={faTools} title={<AnchorTitle title="Technologies & Tools" />}>
             <div className="w-full">
