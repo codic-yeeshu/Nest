@@ -123,14 +123,14 @@ const About = () => {
             </div>
           </SecondaryCard>
 
-        {topContributors && (
-          <TopContributorsList
-            icon={faUsers}
-            contributors={topContributors}
-            maxInitialDisplay={9}
-            type="contributor"
-          />
-        )}
+          {topContributors && (
+            <TopContributorsList
+              icon={faUsers}
+              contributors={topContributors}
+              maxInitialDisplay={9}
+              type="contributor"
+            />
+          )}
 
           <SecondaryCard icon={faTools} title={<AnchorTitle title="Technologies & Tools" />}>
             <div className="w-full">

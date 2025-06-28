@@ -19,7 +19,7 @@ export default function BreadCrumbs({ breadcrumbItems }: BreadCrumbsProps) {
   if (_.isEmpty(breadcrumbItems)) return null
 
   return (
-    <div className="mt-16 w-full pt-4">
+    <div className="mt-16 w-full bg-white pt-4 dark:bg-[#212529]">
       <div className="w-full px-8 sm:px-8 md:px-8 lg:px-8">
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -45,7 +45,7 @@ export default function BreadCrumbs({ breadcrumbItems }: BreadCrumbsProps) {
           {breadcrumbItems.map((item, index) => {
             const isLast = index === breadcrumbItems.length - 1
             return (
-              <BreadcrumbItem key={item.path} isDisabled={isLast}>
+              <BreadcrumbItem key={item.title} isDisabled={isLast}>
                 {isLast ? (
                   <span className="cursor-default font-semibold text-gray-600 dark:text-gray-300">
                     {item.title}

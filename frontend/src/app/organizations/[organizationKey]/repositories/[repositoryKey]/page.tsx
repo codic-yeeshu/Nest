@@ -1,5 +1,4 @@
 'use client'
-
 import { useQuery } from '@apollo/client'
 import {
   faCodeCommit,
@@ -8,10 +7,12 @@ import {
   faStar,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons'
+import _ from 'lodash'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { handleAppError, ErrorDisplay } from 'app/global-error'
+import { GET_ORGANIZATION_METADATA } from 'server/queries/organizationQueries'
 import { GET_REPOSITORY_DATA } from 'server/queries/repositoryQueries'
 import type { Contributor } from 'types/contributor'
 import { formatDate } from 'utils/dateFormatter'
@@ -24,10 +25,15 @@ const RepositoryDetailsPage = () => {
   const [repository, setRepository] = useState(null)
   const [topContributors, setTopContributors] = useState<Contributor[]>([])
   const [recentPullRequests, setRecentPullRequests] = useState(null)
+  const [organizationMetaData, setOrganizationMetaData] = useState(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const { data, error: graphQLRequestError } = useQuery(GET_REPOSITORY_DATA, {
     variables: { repositoryKey: repositoryKey, organizationKey: organizationKey },
   })
+  const { data: organizationData } = useQuery(GET_ORGANIZATION_METADATA, {
+    variables: { login: organizationKey },
+  })
+
   useEffect(() => {
     if (data) {
       setRepository(data.repository)
@@ -35,11 +41,14 @@ const RepositoryDetailsPage = () => {
       setRecentPullRequests(data.recentPullRequests)
       setIsLoading(false)
     }
+    if (organizationData) {
+      setOrganizationMetaData(organizationData)
+    }
     if (graphQLRequestError) {
       handleAppError(graphQLRequestError)
       setIsLoading(false)
     }
-  }, [data, graphQLRequestError, repositoryKey])
+  }, [data, graphQLRequestError, repositoryKey, organizationData])
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -107,7 +116,14 @@ const RepositoryDetailsPage = () => {
     },
   ]
   return (
-    <PageLayout breadcrumbItems={{ title: repository.name }}>
+    <PageLayout
+      breadcrumbItems={[
+        { title: 'Organizations' },
+        { title: _.get(organizationMetaData, 'organization.name', organizationKey) },
+        { title: 'Repositories' },
+        { title: repository.name },
+      ]}
+    >
       <DetailsCard
         details={repositoryDetails}
         languages={repository.languages}
